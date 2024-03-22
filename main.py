@@ -27,8 +27,6 @@ def index():
     num_pl = request.args.get('num_pl')
     location = request.args.get('location')
     active = request.args.get('active')
-    if active not in ['False','True']:
-        return {"message":"active should be either True or False"}
     result = Ambulance.query.filter_by(number_plate=num_pl).first()
     if result:
         if active=="False":
