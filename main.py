@@ -27,16 +27,17 @@ def index():
     num_pl = request.args.get('num_pl')
     location = request.args.get('location')
     active = request.args.get('active')
+    if active not in ['False','True']:
+        return {"message":"active should be either True or False"}
     result = Ambulance.query.filter_by(number_plate=num_pl).first()
     if result:
         if active=="False":
             db.session.delete(result)
-            response = {"message": "removed"}
+            response = {"message": "Status set to False"}
         else:
-            
             result.location=location
             result.active='True'
-            response = {"message": "updated"}
+            response = {"message": "Status set to True"}
         db.session.commit()
         return response
     else:
@@ -44,7 +45,7 @@ def index():
             n_e = Ambulance(number_plate=num_pl,location=location,active=active)
             db.session.add(n_e)
             db.session.commit()
-            response = {"message": "record_added"}
+            response = {"message": "New user added. Status set to True"}
             return response
         except Exception as e:
             return {'message':f'Failed {e}'}
